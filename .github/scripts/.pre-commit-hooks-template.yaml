@@ -1,0 +1,17 @@
+# DO NOT CHANGE THIS FILE BUT ITS TEMPLATE `.github/scripts/.pre-commit-hooks-template.yaml`
+- id: check
+  name: Validate toml files
+  description: Validate toml files
+  entry: taplo check
+  language: rust
+  minimum_pre_commit_version: "2.21.0"
+  additional_dependencies: ["cli:taplo-cli:{{taplo_version}}"]
+  types: [toml]
+- id: fmt
+  name: Format toml files
+  description: Format toml files
+  entry: taplo fmt
+  language: rust
+  minimum_pre_commit_version: "2.21.0"
+  additional_dependencies: ["cli:taplo-cli:{{taplo_version}}"]
+  types: [toml]

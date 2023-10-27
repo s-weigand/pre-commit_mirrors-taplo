@@ -1,0 +1,54 @@
+name: "Update to new version"
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "55 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: write # for ad-m/github-push-action to push code
+    name: update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install jinja2 httpx pre-commit
+
+      - name: Render templates to update
+        id: update
+        run: python .github/scripts/update-hook.py
+
+      - name: Commit changes and create tag
+        if: ${{steps.update.outputs.taplo_version}}
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -u
+          MESSAGE="⬆️ Update from ${{ steps.update.outputs.current_version }} to ${{ steps.update.outputs.taplo_version }}"
+          git commit -m "$MESSAGE"
+          git tag -a "${{ steps.update.outputs.taplo_version }}" -m "$MESSAGE"
+
+      - name: Test hook builds
+        if: ${{steps.update.outputs.taplo_version}}
+        run: pre-commit try-repo .
+
+      - name: Push changes
+        if: ${{steps.update.outputs.taplo_version}}
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          repository: "s-weigand/pre-commit_mirrors-taplo"
+          branch: "main"
+          tags: true
