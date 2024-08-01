@@ -5,7 +5,7 @@
   entry: taplo check
   language: rust
   minimum_pre_commit_version: "2.21.0"
-  additional_dependencies: ["cli:taplo-cli:0.9.0"]
+  additional_dependencies: ["cli:taplo-cli:0.9.3"]
   types: [toml]
 - id: fmt
   name: Format toml files
@@ -13,5 +13,5 @@
   entry: taplo fmt
   language: rust
   minimum_pre_commit_version: "2.21.0"
-  additional_dependencies: ["cli:taplo-cli:0.9.0"]
+  additional_dependencies: ["cli:taplo-cli:0.9.3"]
   types: [toml]

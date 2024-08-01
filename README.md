@@ -19,7 +19,7 @@ Add this to your `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/s-weigand/pre-commit_mirrors-taplo
-    rev: "0.9.0"
+    rev: "0.9.3"
     hooks:
       - id: fmt
       - id: check
